@@ -1,13 +1,12 @@
 #表出力
-import sys
-sys.path.append('/content/drive/MyDrive/module')
+#stock data for excel
 import pandas as pd
 import yahoo_fin.stock_info as si
 import plotly.graph_objects as go
 
-tickers = ['AFRM', 'AAPL', 'AI', 'BABA', 'BIGC', 'BIIB', 'BMY', 'COST', 'CAT', 'COIN', 'COUR', 'CRWD', 'CVS', 'DDOG', 'DAL', 'DIS', 'DKNG', 'DOCS', 'DRVN', 'GDRX', 'EURN', 'GM', 'KOS', 'MAR', 'MAXR', 'MSFT', 'NKE', 'NFLX', 'OKTA', 'PFE', 'PG', 'PYPL', 'REGN', 'RBLX', 'SEER', 'SPCE', 'SBLK', 'TSLA', 'TSM', 'TTD', 'TWLO', 'U', 'V', 'VALE', 'VLDR', 'XMTR', 'ZM']
+tickers = ['AFRM', 'AAPL', 'AI', 'BABA', 'BIGC', 'BIIB', 'BMY', 'COST', 'CAT', 'COIN', 'COUR', 'CRWD', 'CVS', 'DDOG', 'DAL', 'DIS', 'DKNG', 'DOCS', 'DRVN', 'GDRX', 'EURN', 'GM', 'KOS', 'MAR', 'MAXR', 'MSFT', 'NKE', 'NFLX', 'OKTA', 'PFE', 'PG', 'PYPL', 'REGN', 'RBLX', 'SEER', 'SPCE', 'SBLK', 'TSLA', 'TSM', 'TTD', 'TWLO', 'U', 'V', 'VALE', 'VLDR', 'XMTR', 'ZM','GLD','HDV','SPYD','VYM','MGV','DIA','QQQ','VAW','VT','VTI','VWO','EWY','TUR','CADJPY=X','GBPJPY=X','EURJPY=X','SGDJPY=X','HKDJPY=X','JPY=X','CNYJPY=X']
 #'VOO', 'TWTR', 'AMZN', 'OTLY', 'FB', 'TSLA', 'NVDA'
-header   = ['Ticker','Adj Close', 'Close','Volume', 'Market Cap', 'PER','max drop',
+header   = ['Ticker', 'Close','Adj Close','Volume', 'Market Cap', 'PER','max drop',
           'YTD', '1mo', '1wk', '1d']
 title = "Watchlist"
 
@@ -70,6 +69,6 @@ fig.update_layout(
   font={ 'family': 'Noto Sans CJK JP', 'size': 16},
   width=1100
 )
-fig.show()
+#fig.show()
 
 df.to_csv('stock.csv')
