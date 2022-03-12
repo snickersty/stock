@@ -24,9 +24,11 @@ msft = yf.Ticker("MSFT")
 stocks = ['AFRM', 'AAPL', 'AI', 'BABA', 'BIGC', 'BIIB', 'BMY', 'COST', 'CAT', 'COIN', 'COUR', 'CRWD', 'CVS', 'DDOG', 'DAL', 'DIS', 'DKNG', 'DOCS', 'DRVN', 'GDRX', 'EURN', 'GM', 'KOS', 'MAR', 'MAXR', 'MSFT', 'NKE', 'NFLX', 'OKTA', 'PFE', 'PG', 'PYPL', 'REGN', 'RBLX', 'SEER', 'SPCE', 'SBLK', 'TSLA', 'TSM', 'TTD', 'TWLO', 'U', 'V', 'VALE', 'VLDR', 'XMTR', 'ZM']
 df = pd.DataFrame()
 
+# DATE
 today = datetime.now().date().strftime('%Y-%m-%d')
 yesterday = datetime.now() - timedelta(1)
 yesterday = datetime.strftime(yesterday, '%Y-%m-%d')
+
 
 for stock in stocks:
     output = yf.Ticker(stock).history(start='2021-08-25', end=today).Close

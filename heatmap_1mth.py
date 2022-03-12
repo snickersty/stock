@@ -12,32 +12,7 @@ import IPython
 import datetime as datetime
 import pytz
 import os
-
-##### 初期設定　ここから ##################
-tickers1 = {'^TNX':'金利','^DJI':'ダウ','^IXIC':'ナスダック', '^GSPC':'SP500',
-            '^RUT':'ラッセル', '^VIX':'VIX指数','^N225':'日経', 'GLD':'GOLD', 'JPY=X':'USD/JPY','BTC-USD':'BTC'}
-
-tickers2 = {'VIS':'資本財', 'VAW':'素材', 'VCR':'一般消費財'
- , 'VDE':'エネルギー', 'VPU':'公益', 'VDC':'生活必需品'
- , 'VHT':'ヘルスケア', 'VOX':'電気通信', 'VFH':'金融'
- , 'VGT':'情報技術', 'VNQ':'不動産'}
-
-tickers3 = {'DIA':'ダウ', 'QQQ':'ナスダック', 'VTI':'トータル',
-            'IWM':'ラッセル20','IWB':'ラッセル10',
-            'CLOU':'クラウド', 'VUG':'大型グロース','VBK':'小型グロース',
-            'MGV':'大型バリュー', 'VBR':'小型バリュー','VT':'全世界', 'VWO':'新興国',
-            'SPYD':'高配当', 'HDV':'高配当', 'VYM':'高配当'
-}
-
-tickers4 = {'MSFT':'マイクロソフト', 'AAPL':'アップル', 'FB':'フェイスブック',
-            'GOOGL':'グーグル', 'AMZN':'アマゾン'
- }
-
-tickers5 = {'AFRM':'Affirm', 'BIGC':'BIGC', 'COUR':'Coursera'
- ,  'CRWD':'Crowdstrike', 'DDOG':'DataDog', 'DOCS':'Doximity', 'OKTA':'OKTA'
- , 'TTD':'Tradedesk'}
-
-categ = {'指数+他':tickers1, 'セクター':tickers2, 'ETF':tickers3, 'FANG＋M':tickers4,  'Recent IPO':tickers5}
+from tickers import*
 
 # # 1day #####
 # diff_day = 1
@@ -56,11 +31,16 @@ max_per  = 10 # maxのパーセンテージ
 # print(data[-1]/data2[-1]-1)
 # print(data.pct_change(diff_day))
 
-x_size = 5 # 横に表示する最大数
+x_size = 8 # 横に表示する最大数
 ##### 初期設定　ここまで ##################
 
 x_width = 90
 y_width = 75
+
+# data=si.get_data('DIA',start_date='2021-08-30')["close"]
+# print(data)
+# print(data.pct_change(diff_day))
+# print(data.pct_change(diff_day).iat[-1])
 
 def get_rgb(limit, value):
  if(value<=-limit): return (246,53,56)
@@ -75,6 +55,7 @@ def get_rgb(limit, value):
  rgb=color_list[50+int(value/limit*50)]
  return (int(rgb[0]*255*1.5),int(rgb[1]*255*1.5),int(rgb[2]*255*1.5))
 
+font_title = ImageFont.truetype("/font/kurobara-gothic-bold.ttf", 25)
 font_name = ImageFont.truetype("/font/Microsoft Yahei.ttf", 12)
 font_cate = ImageFont.truetype("/font/微软雅黑.ttf", 16)
 font_ticker = ImageFont.truetype("/font/FrutigerLTStd-ExtraBlackCn.otf", 16)
@@ -84,23 +65,27 @@ y_size=0
 for name in categ.keys():
  y_size=y_size+ceil(len(categ[name])/x_size)
 
-im = Image.new('RGB', (x_width*x_size, y_width*y_size+30*len(categ)), (54,49,70))
+im = Image.new('RGB', (x_width*x_size, y_width*y_size+42*len(categ)), (54,49,70))
 draw = ImageDraw.Draw(im)
 
 y_pos=0
+draw.rectangle([(0, y_pos), (x_width*x_size, y_pos+50)], fill=(250,250,200))
+y_pos = 50
 for name in categ.keys():
  x_pos=0
  draw.rectangle([(0, y_pos), (x_width*x_size, y_pos+30)], fill=(250,250,138), outline=(38,41,49))
- draw.text((x_pos+10, y_pos+10),name,'black',font=font_cate)
+ draw.text((x_pos+10, y_pos+5),name,'black',font=font_cate)
  y_pos=y_pos+30
  for ticker in categ[name].keys():
    #print(ticker)
    try:
-       data = si.get_data(ticker,end_date='2021-09-30')["close"]
+       data = si.get_data(ticker,start_date='2021-12-30',end_date='2022-02-01')["close"]
+       print(ticker, data)
        data_pct=data.pct_change(diff_day)
 
        stock='${:,.2f}'.format(data.iat[-1])
        pct=data_pct.iat[-1]
+       print(ticker,pct)
        chgpct='{:.2%}'.format(pct)
        if chgpct[:1]!='-': chgpct='+'+chgpct
 
@@ -116,8 +101,10 @@ for name in categ.keys():
          y_pos=y_pos+y_width
    except:
         pass
-draw.text((x_width*x_size-220, 10),datetime.datetime.now(pytz.timezone('America/New_York')).strftime('1month variance '+"2021/09/30"),'black',font=font_cate)
+draw.text((x_width*x_size-490, 10),'***本日のヒートマップ***','black',font=font_title)
+draw.text((x_width*x_size-100, 15),'@snickersty','black',font=font_cate)
+draw.text((x_width*x_size-150, 55),datetime.datetime.now(pytz.timezone('America/New_York')).strftime('前月比 '+"2022/01/31"),'black',font=font_cate)
 
 if not os.path.isdir('/'): os.makedirs('/')
-im.save('1mth(2021-09).png')
+im.save('1mth.png')
 IPython.display.Image('test.png')

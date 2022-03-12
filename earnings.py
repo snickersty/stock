@@ -9,84 +9,95 @@ import pytz
 import os
 import IPython
 import dateutil.parser
+import datetime
 
-tickers = ['GOOGL', 'AAPL', 'FB', 'AMZN', 'MSFT','TTD']
+tickers = ['AAPL','ABNB','AFRM', 'AI','AR', 'ARCB', 'BABA', 'BIGC', 'BIIB', 'BMY',
+'CAT','CCL','CF','COST',  'COIN', 'COUR', 'CRWD', 'CVS',
+'DDOG', 'DAL', 'DIS', 'DKNG', 'DOCN','DOCS', 'DRVN', 'ENPH','EURN','FCX','GDRX', 'GM','GOOGL',
+'IAC','ICE','INMD','KOS', 'MAR', 'MAXR', 'MQ','MSFT','MTDR', 'MTTR','MU',
+'NET', 'NKE', 'NFLX', 'NVDA', 'NTR','OKTA','ONON', 'PFE', 'PG', 'PLTR','PYPL',
+'QCOM','RDWR','REGN', 'RIVN', 'RBLX','RPRX', 'SBLK','SEER','SEMR', 'SPCE', 'SQ',
+'TSLA', 'TSM', 'TTD', 'TWLO', 'U', 'UPST','WST',
+'V', 'VALE', 'VLDR', 'XMTR', 'ZM','ZKIN'
+]
 
 
 
 header   = ['Ticker','date', 'EPS(E)', 'EPS(ACT)', 'EPS(%)', 'Rev(E)', 'Rev(ACT)',
-'Rev(%)','YoY(%)', 'Next date', 'EPS(E)', 'Rev(E)']
+'Rev(%)','YoY(%)', 'Next date', 'EPS(NE)', 'Rev(NE)']
 
 df = pd.DataFrame(index=tickers, columns=header)
 df['Ticker']=tickers
 
 # データ作成
 for t in range(len(tickers)):
- ticker=tickers[t]
- print("\r now reading -->>  " + ticker+ "  ---" ,end="")
- url='https://www.earningswhispers.com/epsdetails/'+ticker
- site = requests.get(url)
- data = BeautifulSoup(site.text,'html.parser')
+  ticker=tickers[t]
+  print("\r now reading -->>  " + ticker+ "  ---" ,end="")
+  url='https://www.earningswhispers.com/epsdetails/'+ticker
+  site = requests.get(url)
+  data = BeautifulSoup(site.text,'html.parser')
 
- try:
-   ldate=re.sub('.*/>(.*)</.*', r'\1', str(data.find_all("div", class_="mbcontent")[0]))
-   if(ldate!=''):
-     last_date = dateutil.parser.parse(re.sub('.*/>(.*)</.*', r'\1', str(data.find_all("div", class_="mbcontent")[0])))
-     df.loc[tickers[t],'date']=last_date.strftime('%Y/%m/%d %H:%M')
+  try:
+    #find date of earning
+    ldate=re.sub('.*/>(.*)</.*', r'\1', str(data.find_all("div", class_="mbcontent")[0]))
+    if(ldate!=''):
+      last_date = dateutil.parser.parse(re.sub('.*/>(.*)</.*', r'\1', str(data.find_all("div", class_="mbcontent")[0])))
+      df.loc[tickers[t],'date']=last_date.strftime('%Y/%m/%d %H:%M')
 
-   eps_act = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", class_="mainitem")[0])).replace('(','-').replace(')','')
-   eps_est = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", class_="thirditem")[0])).replace('(','-').replace(')','')
+    eps_act = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", class_="mainitem")[0])).replace('(','-').replace(')','')
+    eps_est = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", class_="thirditem")[0])).replace('(','-').replace(')','')
 
-   if(len(data.find_all("div", class_="esurp"))>0):
-     eps_sur = re.sub('.*"esurp", "(.*)", "EPS".*', r'\1', str(data.find_all("div", class_="esurp")[0]))
-     df.loc[tickers[t],'EPS(%)']=eps_sur
+    if(len(data.find_all("div", class_="esurp"))>0):
+      eps_sur = re.sub('.*"esurp", "(.*)", "EPS".*', r'\1', str(data.find_all("div", class_="esurp")[0]))
+      df.loc[tickers[t],'EPS(%)']=eps_sur
 
-   rev_act = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", class_="fourthitem")[0])).replace('il','')
-   rev_est = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", class_="fifthitem")[0])).replace('il','')
+    rev_act = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", class_="fourthitem")[0])).replace('il','')
+    rev_est = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", class_="fifthitem")[0])).replace('il','')
 
-   if(len(data.find_all("div", class_="rsurp"))>0):
-     rev_sur = re.sub('.*"rsurp", "(.*)", "Revenue".*', r'\1', str(data.find_all("div", class_="rsurp")[0]))
-     df.loc[tickers[t],'Rev(%)']=rev_sur
-   else:
-     df.loc[tickers[t],'Rev(%)']=''
-   if(len(data.find_all("div", class_="revgrowth"))>0):
-     rev_gro = re.sub('.*"revgrowth", "(.*)%",.*', r'\1%', str(data.find_all("div", class_="revgrowth")[0]))
-     df.loc[tickers[t],'YoY(%)']=rev_gro
-   else:
-     df.loc[tickers[t],'YoY(%)']=''
-   df.loc[tickers[t],'EPS(E)']=eps_est
-   df.loc[tickers[t],'EPS(ACT)']=eps_act
-   df.loc[tickers[t],'Rev(E)']=rev_est
-   df.loc[tickers[t],'Rev(ACT)']=rev_act
-   if(eps_act!='')&(eps_est!=''):
-     df.loc[tickers[t],'EPS(%)']='{:.2%}'.format(float(float(eps_act.replace('$',''))-float(eps_est.replace('$','')))/abs(float(eps_est.replace('$',''))))
-   else:
-     df.loc[tickers[t],'EPS(%)']=''
+    if(len(data.find_all("div", class_="rsurp"))>0):
+      rev_sur = re.sub('.*"rsurp", "(.*)", "Revenue".*', r'\1', str(data.find_all("div", class_="rsurp")[0]))
+      df.loc[tickers[t],'Rev(%)']=rev_sur
+    else:
+      df.loc[tickers[t],'Rev(%)']=''
+    if(len(data.find_all("div", class_="revgrowth"))>0):
+      rev_gro = re.sub('.*"revgrowth", "(.*)%",.*', r'\1%', str(data.find_all("div", class_="revgrowth")[0]))
+      df.loc[tickers[t],'YoY(%)']=rev_gro
+    else:
+      df.loc[tickers[t],'YoY(%)']=''
+    df.loc[tickers[t],'EPS(E)']=eps_est
+    df.loc[tickers[t],'EPS(ACT)']=eps_act
+    df.loc[tickers[t],'Rev(E)']=rev_est
+    df.loc[tickers[t],'Rev(ACT)']=rev_act
+    if(eps_act!='')&(eps_est!=''):
+      df.loc[tickers[t],'EPS(%)']='{:.2%}'.format(float(float(eps_act.replace('$',''))-float(eps_est.replace('$','')))/abs(float(eps_est.replace('$',''))))
+    else:
+      df.loc[tickers[t],'EPS(%)']=''
 
- except:
-   print("NO OLD DATA:",ticker)
-   pass
+  except:
+    print("NO OLD DATA:",ticker)
+    pass
 
- url='https://www.earningswhispers.com/stocks/'+ticker
- site = requests.get(url)
- data = BeautifulSoup(site.text,'html.parser')
+  url='https://www.earningswhispers.com/stocks/'+ticker
+  site = requests.get(url)
+  data = BeautifulSoup(site.text,'html.parser')
 
- next_day  = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", class_="mainitem")[1]))
- next_time = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", id="earningstime")[0]))
- try:
-   next_date = dateutil.parser.parse(next_day + ' ' + next_time.replace('ET',''))
- except:
-   next_date = dateutil.parser.parse(next_day)
-   pass
- if(last_date.strftime('%Y/%m/%d')!=next_date.strftime('%Y/%m/%d')):
-   df.loc[tickers[t],'next date']=next_date.strftime('%Y/%m/%d %H:%M')
- eps_cons = re.sub('.*>Consensus:\s+(.*)</.*', r'\1', str(data.find_all("div", id="consensus")[0])).replace('(','-').replace(')','')
- rev_cons = re.sub('.*>Revenue:\s+(.*)</.*', r'\1', str(data.find_all("div", id="revest")[0])).replace('il','')
- df.loc[tickers[t],'EPS(E)']=eps_cons
- df.loc[tickers[t],'Rev(E)']=rev_cons
+  next_day  = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", class_="mainitem")[1]))
+  next_time = re.sub('.*>(.*)</.*', r'\1', str(data.find_all("div", id="earningstime")[0]))
+  try:
+    next_date = dateutil.parser.parse(next_day + ' ' + next_time.replace('ET',''))
+  except:
+    next_date = dateutil.parser.parse(next_day)
+    pass
+  if(last_date.strftime('%Y/%m/%d')!=next_date.strftime('%Y/%m/%d')):
+    df.loc[tickers[t],'Next date']=next_date.strftime('%Y/%m/%d %H:%M')
+  eps_cons = re.sub('.*>Consensus:\s+(.*)</.*', r'\1', str(data.find_all("div", id="consensus")[0])).replace('(','-').replace(')','')
+  rev_cons = re.sub('.*>Revenue:\s+(.*)</.*', r'\1', str(data.find_all("div", id="revest")[0])).replace('il','')
+  df.loc[tickers[t],'EPS(NE)']=eps_cons
+  df.loc[tickers[t],'Rev(NE)']=rev_cons
 
-df = df.sort_values(['next date','date'], ascending=[True,True])
+df = df.sort_values(['Next date','date'], ascending=[True,True])
 sort_tickers = list(df['Ticker'])
+#print(df.loc['DOCS','EPS(E)'])
 
 #########################################################################
 # 表作成
@@ -111,34 +122,34 @@ im = Image.new('RGB', (sum(x_width)+x_buff*2, y_width*(len(tickers)+1)+title_y+1
 draw = ImageDraw.Draw(im)
 
 #### タイトル 部分 ####
-draw.text((sum(x_width)/2-400/2, 10),title+ ' ('+datetime.datetime.now(pytz.timezone('Asia/Tokyo')).strftime("%Y/%m/%d %H:%M")+')',
+draw.text((sum(x_width)/2-400/2, 10),title+ ' ('+datetime.datetime.now(pytz.timezone('America/New_York')).strftime("%Y/%m/%d %H:%M")+')',
       text_color,font=font_title)
 
 #### ヘッダー 部分 ####
 xpos=x_buff
 ypos=title_y
 for i in range(len(header)):
- draw.rectangle([(xpos, ypos), (xpos+x_width[i], ypos+y_width)], fill=(221,237,255), outline=line_color,  width=1)
- draw.text((xpos+10, ypos+5),header[i], text_color,font=font_head)
- xpos=xpos+x_width[i]
+  draw.rectangle([(xpos, ypos), (xpos+x_width[i], ypos+y_width)], fill=(221,237,255), outline=line_color,  width=1)
+  draw.text((xpos+10, ypos+5),header[i], text_color,font=font_head)
+  xpos=xpos+x_width[i]
 #### データ 部分 ####
 for t in range(len(sort_tickers)):
- ticker = sort_tickers[t]
- xpos=x_buff
- ypos=ypos+y_width
- for i in range(len(header)):
-   draw.rectangle([(xpos, ypos), (xpos+x_width[i], ypos+y_width)], outline=line_color,  width=1
-       , fill=((255,255,255) if t % 2 == 0 else (235,235,235)))
+  ticker = sort_tickers[t]
+  xpos=x_buff
+  ypos=ypos+y_width
+  for i in range(len(header)):
+    draw.rectangle([(xpos, ypos), (xpos+x_width[i], ypos+y_width)], outline=line_color,  width=1
+        , fill=((255,255,255) if t % 2 == 0 else (235,235,235)))
 
-   # 色付け #########
-   if(header[i] in cell_pct):
-     if (str(df.loc[ticker,header[i]])[:1]=='-'):txt_color="red"
-     else:txt_color="blue"
-   else:
-    txt_color=text_color
-
-   draw.text((xpos+5, ypos+5),str(df.loc[ticker,header[i]]), txt_color,font=font_txt)
-   xpos=xpos+x_width[i]
+    # 色付け #########
+    if(header[i] in cell_pct):
+      if (str(df.loc[ticker,header[i]])[:1]=='-'):txt_color="red"
+      else:txt_color="blue"
+    else:
+      txt_color=text_color
+    print(df.loc[ticker,header[i]])
+    draw.text((xpos+5, ypos+5),str(df.loc[ticker,header[i]]), txt_color,font=font_txt)
+    xpos=xpos+x_width[i]
 
 # 太枠形成 ##############################################################
 xpos=x_buff
@@ -156,5 +167,5 @@ draw.rectangle([(xpos+x_width[header.index(bold_fm)-1], ypos), (xpos+sum(x_width
 # 出力 ##############################################################
 im.save('earnings.png')
 IPython.display.Image('earnings.png')
-df.to_csv('earnings.csv')
+df.to_csv('earnings_'+str(datetime.datetime.now().strftime('%Y_%m_%d')) + '.csv')
 #########################################################################
