@@ -75,7 +75,7 @@ for name in categ.keys():
   for ticker in categ[name].keys():
     data = si.get_data(ticker)['close']
     data_pct=data.pct_change(diff_day)
-    print(data,ticker,data.iat[-1])
+    #print(data,ticker,data.iat[-1])
 
     stock='${:,.2f}'.format(data.iat[-1])
     pct=data_pct.iat[-1]
@@ -106,6 +106,7 @@ IPython.display.Image('1day.png')
 ######################## 1wk ###################
 if action == '1wk':
   diff_day  = 5
+  last_week = (datetime.datetime.today() - datetime.timedelta(diff_day)).strftime('%Y-%m-%d')
   max_per  = 6
 
   def get_rgb(limit, value):
@@ -146,7 +147,7 @@ if action == '1wk':
     for ticker in categ[name].keys():
       #print(ticker)
       data = si.get_data(ticker)["close"]
-      data_pct=data.pct_change(diff_wk)
+      data_pct=data.pct_change(diff_day)
 
       stock='${:,.2f}'.format(data.iat[-1])
       pct=data_pct.iat[-1]

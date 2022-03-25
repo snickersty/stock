@@ -20,7 +20,7 @@ from tickers import*
 # diff_day  = 4
 # max_per  = 6 # maxのパーセンテージ
 ## 1month #####
-diff_day  = 252 #252 days for 2021
+diff_day  = 73 #252 days for 2021
 max_per  = 10 # maxのパーセンテージ
 
 
@@ -78,7 +78,7 @@ for name in categ.keys():
  for ticker in categ[name].keys():
    #print(ticker)
    try:
-       data = si.get_data(ticker,start_date='2020-12-31')["close"]
+       data = si.get_data(ticker,start_date='2021-12-3')["close"]
        data_pct=data.pct_change(diff_day)
 
        stock='${:,.2f}'.format(data.iat[-1])
@@ -104,5 +104,5 @@ draw.text((x_width*x_size-100, 15),'@snickersty','black',font=font_cate)
 draw.text((x_width*x_size-150, 55),datetime.datetime.now(pytz.timezone('America/New_York')).strftime('前年比 '+"2021/12/31"),'black',font=font_cate)
 
 if not os.path.isdir('/'): os.makedirs('/')
-im.save('1year(2021-12-16).png')
+im.save('1year.png')
 IPython.display.Image('test.png')

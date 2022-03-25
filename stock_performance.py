@@ -7,11 +7,11 @@ import plotly.graph_objects as go
 tickers_list = ['AAPL','ABNB','AFRM', 'AI','AR', 'ARCB', 'BABA', 'BIGC', 'BIIB', 'BMY',
 'CAT','CCL','CF','COST',  'COIN', 'COUR', 'CRWD', 'CVS',
 'DDOG', 'DAL', 'DIS', 'DKNG', 'DOCN','DOCS', 'DRVN', 'ENPH','EURN','FCX','GDRX', 'GM','GOOGL',
-'IAC','ICE','INMD','KOS', 'MAR', 'MAXR', 'MQ','MSFT','MTDR', 'MTTR','MU',
-'NET', 'NKE', 'NFLX', 'NVDA', 'NTR','OKTA','ONON', 'PFE', 'PG', 'PLTR','PYPL',
+'HWM','IAC','ICE','INMD','KOS', 'MAR', 'MAXR', 'MQ','MSFT','MTDR', 'MTTR','MU',
+'NET', 'NKE', 'NFLX', 'NVDA', 'NTR','OKTA','ONON','OVV','PFE', 'PG', 'PLTR','PYPL',
 'QCOM','RDWR','REGN', 'RIVN', 'RBLX','RPRX', 'SBLK','SEER','SEMR', 'SPCE', 'SQ',
 'TSLA', 'TSM', 'TTD', 'TWLO', 'U', 'UPST','WST',
-'V', 'VALE', 'VLDR', 'XMTR', 'ZM','ZKIN',
+'V', 'VALE', 'VLDR', 'XMTR', 'ZIM','ZM','ZKIN',
 'SPXS','GLD','HDV','SPYD','VYM','MGV','DIA','QQQ','VAW','VDE','VT','VTI','VWO','XLE',
 'ERX','FAS','TECS','TZA',
 'EWY','TUR','ACWI','GLIN','FXI','EWZ','EWW','EPOL',
@@ -27,7 +27,7 @@ df=pd.DataFrame()
 for i in range(len(tickers_list)):
   data = si.get_data(tickers_list[i])
   df.loc[tickers_list[i],'Ticker']=tickers_list[i]
-  print(data,tickers_list[i])
+  #print(data,tickers_list[i])
 
   stk_close=data["close"].iat[-1]
   df.loc[tickers_list[i],'Close']='%.2f'%(stk_close)

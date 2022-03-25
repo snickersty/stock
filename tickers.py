@@ -3,11 +3,11 @@
 tickers_list = ['AAPL','ABNB','AFRM', 'AI','AR', 'ARCB', 'BABA', 'BIGC', 'BIIB', 'BMY',
 'CAT','CCL','COST',  'COIN', 'COUR', 'CRWD', 'CVS',
 'DDOG', 'DAL', 'DIS', 'DKNG', 'DOCN','DOCS', 'DRVN', 'ENPH','EURN','FCX','GDRX', 'GM','GOOGL',
-'IAC','ICE','INMD','KOS', 'MAR', 'MAXR', 'MQ','MSFT','MTDR', 'MTTR','MU',
-'NET', 'NKE', 'NFLX', 'NVDA', 'NTR','OKTA','ONON', 'PFE', 'PG', 'PLTR','PYPL',
+'HWM','IAC','ICE','INMD','KOS', 'MAR', 'MAXR', 'MQ','MSFT','MTDR', 'MTTR','MU',
+'NET', 'NKE', 'NFLX', 'NVDA', 'NTR','OKTA','ONON','OVV','PFE', 'PG', 'PLTR','PYPL',
 'QCOM','RDWR','REGN', 'RIVN', 'RBLX','RPRX', 'SBLK','SEER','SEMR', 'SPCE', 'SQ',
 'TSLA', 'TSM', 'TTD', 'TWLO', 'U', 'UPST','WST',
-'V', 'VALE', 'VLDR', 'XMTR', 'ZM','ZKIN',
+'V', 'VALE', 'VLDR', 'XMTR', 'ZIM','ZM','ZKIN',
 'SPXS','GLD','HDV','SPYD','VYM','MGV','DIA','QQQ','VAW','VDE','VT','VTI','VWO','XLE',
 'EWY','TUR','ACWI','GLIN','FXI','EWZ','EWW','EPOL',
 'CADJPY=X','GBPJPY=X','EURJPY=X','SGDJPY=X','HKDJPY=X','JPY=X','CNYJPY=X']
@@ -22,7 +22,7 @@ tickers_list_analysis = ['AAPL','AFRM', 'AI','AR', 'BABA', 'BIGC', 'BIIB', 'BMY'
 'V', 'VALE', 'VLDR', 'XMTR', 'ZM','ZKIN']
 
 tickers1 = {'^TNX':'金利','^DJI':'ダウ','^IXIC':'ナスダック', '^GSPC':'SP500',
-            '^RUT':'ラッセル', '^VIX':'VIX指数','^N225':'日経', 'GLD':'GOLD', 'JPY=X':'USD/JPY', 'BTC-USD':'BTC'}
+            '^RUT':'ラッセル', '^VIX':'VIX指数','^N225':'日経', 'GLD':'GOLD', 'JPY=X':'USD/JPY', 'BTC-USD':'BTC','ETH-USD':'ETH'}
 
 tickers2 = {'VIS':'資本財', 'VAW':'素材', 'VCR':'一般消費財'
  , 'VDE':'エネルギー', 'VPU':'公益', 'VDC':'生活必需品'
@@ -44,5 +44,7 @@ tickers5 = {'AFRM':'Affirm', 'BIGC':'BIGC', 'COUR':'Coursera',
  'CRWD':'Crowdstrike', 'DDOG':'DataDog', 'DLO':'Dlocal', 'DOCN':'DigitalOcean','DOCS':'Doximity',
  'MQ':'Marqeta','OKTA':'OKTA','PLTR':'Palantir', 'RBLX':'Roblox','RIVN':'Rivian', 'SQ':'Block',
  'TTD':'Tradedesk','UPST': 'Upstart'}
+
+tickers6 = {'EEM':'途上国','GXC':'中国','FXI':'中国・大キャップ','RSX':'ロシア','EWM':'マレーシア','EWS':'シンガポール','EWW':'メキシコ','TUR':'トルコ','VNM':'ベトナム','PIN':'インド','EZA':'南アフリカ','EWJ':'日本'}
 #, 'RBLX':'Roblox', 'XMTR':'Xometry'
-categ = {'指数＋その他':tickers1, 'セクター':tickers2, 'ETF':tickers3, 'GAFAMTN':tickers4,  '小型・近年IPO':tickers5}
+categ = {'指数＋その他':tickers1, 'セクター':tickers2, 'ETF':tickers3, '国別ETF':tickers6, 'GAFAMTN':tickers4,  '小型・近年IPO':tickers5}
