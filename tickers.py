@@ -1,7 +1,7 @@
 #TICKERS SOURCE
 
 tickers_list = ['AAPL','ABNB','AFRM', 'AI','AR', 'ARCB', 'BABA', 'BIGC', 'BIIB', 'BMY',
-'CAT','CCL','COST',  'COIN', 'COUR', 'CRWD', 'CVS',
+'CAT','CCL','CMRE','COST',  'COIN', 'COUR', 'CRWD', 'CVS',
 'DDOG', 'DAL', 'DIS', 'DKNG', 'DOCN','DOCS', 'DRVN', 'ENPH','EURN','FCX','GDRX', 'GM','GOOGL',
 'HWM','IAC','ICE','INMD','KOS', 'MAR', 'MAXR', 'MQ','MSFT','MTDR', 'MTTR','MU',
 'NET', 'NKE', 'NFLX', 'NVDA', 'NTR','OKTA','ONON','OVV','PFE', 'PG', 'PLTR','PYPL',
@@ -10,7 +10,9 @@ tickers_list = ['AAPL','ABNB','AFRM', 'AI','AR', 'ARCB', 'BABA', 'BIGC', 'BIIB',
 'V', 'VALE', 'VLDR', 'XMTR', 'ZIM','ZM','ZKIN',
 'SPXS','GLD','HDV','SPYD','VYM','MGV','DIA','QQQ','VAW','VDE','VT','VTI','VWO','XLE',
 'EWY','TUR','ACWI','GLIN','FXI','EWZ','EWW','EPOL',
-'CADJPY=X','GBPJPY=X','EURJPY=X','SGDJPY=X','HKDJPY=X','JPY=X','CNYJPY=X']
+'CADJPY=X','GBPJPY=X','EURJPY=X','SGDJPY=X','HKDJPY=X','JPY=X','CNYJPY=X','6758.T',
+'BTC-USD','ETH-USD','BNB-USD','CVX-USD','KP3R-USD','OHM-USD','CRV-USD','MANA-USD','SUSHI-USD','UNI-USD','AMPL-USD','XRP-USD']
+
 
 tickers_list_analysis = ['AAPL','AFRM', 'AI','AR', 'BABA', 'BIGC', 'BIIB', 'BMY',
 'COST', 'CAT', 'COIN', 'COUR', 'CRWD', 'CVS',
@@ -45,6 +47,6 @@ tickers5 = {'AFRM':'Affirm', 'BIGC':'BIGC', 'COUR':'Coursera',
  'MQ':'Marqeta','OKTA':'OKTA','PLTR':'Palantir', 'RBLX':'Roblox','RIVN':'Rivian', 'SQ':'Block',
  'TTD':'Tradedesk','UPST': 'Upstart'}
 
-tickers6 = {'EEM':'途上国','GXC':'中国','FXI':'中国・大キャップ','RSX':'ロシア','EWM':'マレーシア','EWS':'シンガポール','EWW':'メキシコ','TUR':'トルコ','VNM':'ベトナム','PIN':'インド','EZA':'南アフリカ','EWJ':'日本'}
+tickers6 = {'EEM':'途上国','GXC':'中国','FXI':'中国・大キャップ','RSX':'ロシア','EWM':'マレーシア','EWS':'シンガポール','EWW':'メキシコ','TUR':'トルコ','EPOL':'ポーランド','VNM':'ベトナム','PIN':'インド','EZA':'南アフリカ','EWJ':'日本'}
 #, 'RBLX':'Roblox', 'XMTR':'Xometry'
 categ = {'指数＋その他':tickers1, 'セクター':tickers2, 'ETF':tickers3, '国別ETF':tickers6, 'GAFAMTN':tickers4,  '小型・近年IPO':tickers5}

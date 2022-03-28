@@ -3,21 +3,8 @@
 import pandas as pd
 import yahoo_fin.stock_info as si
 import plotly.graph_objects as go
-#from tickers import*
-tickers_list = ['AAPL','ABNB','AFRM', 'AI','AR', 'ARCB', 'BABA', 'BIGC', 'BIIB', 'BMY',
-'CAT','CCL','CF','COST',  'COIN', 'COUR', 'CRWD', 'CVS',
-'DDOG', 'DAL', 'DIS', 'DKNG', 'DOCN','DOCS', 'DRVN', 'ENPH','EURN','FCX','GDRX', 'GM','GOOGL',
-'HWM','IAC','ICE','INMD','KOS', 'MAR', 'MAXR', 'MQ','MSFT','MTDR', 'MTTR','MU',
-'NET', 'NKE', 'NFLX', 'NVDA', 'NTR','OKTA','ONON','OVV','PFE', 'PG', 'PLTR','PYPL',
-'QCOM','RDWR','REGN', 'RIVN', 'RBLX','RPRX', 'SBLK','SEER','SEMR', 'SPCE', 'SQ',
-'TSLA', 'TSM', 'TTD', 'TWLO', 'U', 'UPST','WST',
-'V', 'VALE', 'VLDR', 'XMTR', 'ZIM','ZM','ZKIN',
-'SPXS','GLD','HDV','SPYD','VYM','MGV','DIA','QQQ','VAW','VDE','VT','VTI','VWO','XLE',
-'ERX','FAS','TECS','TZA',
-'EWY','TUR','ACWI','GLIN','FXI','EWZ','EWW','EPOL',
-'CADJPY=X','GBPJPY=X','EURJPY=X','SGDJPY=X','HKDJPY=X','JPY=X','CNYJPY=X','6758.T',
-'BTC-USD','ETH-USD','BNB-USD','CVX-USD','KP3R-USD','OHM-USD','CRV-USD','MANA-USD','SUSHI-USD','UNI-USD','AMPL-USD','XRP-USD']
-#
+from tickers import*
+
 header   = ['Ticker', 'Close','Adj Close','Max','Min','Volume', 
           'max drop','YTD', '1mo', '1wk', '1d'] #'Market Cap',
 title = "Watchlist"

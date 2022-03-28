@@ -14,22 +14,15 @@ import pytz
 import os
 from tickers import*
 from datetime import date
+from date import*
 
 # 1day #####
 max_per = 3 # maxのパーセンテージ (for coloring level)
 ## 1week ##### #diff_day  = 5 #max_per  = 3 # maxのパーセンテージ
 ## 1month ##### #diff_day  = 22 #max_per  = 10 # maxのパーセンテージ
 
-action = 0
 diff_day = 1
 diff_wk = 4
-
-#SET THE DATE#a
-#if it's a monday compare to 3 days ago, friday
-if date.today().weekday() == 4:
-    action = '1wk'
-else:
-    action = '1day'
 
 
 x_size = 8 # 横に表示する最大数
@@ -104,9 +97,8 @@ IPython.display.Image('1day.png')
 
 
 ######################## 1wk ###################
-if action == '1wk':
+if week_action == 1:
   diff_day  = 5
-  last_week = (datetime.datetime.today() - datetime.timedelta(diff_day)).strftime('%Y-%m-%d')
   max_per  = 6
 
   def get_rgb(limit, value):

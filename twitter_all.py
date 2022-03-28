@@ -8,66 +8,7 @@ import matplotlib.pyplot as plt
 import yahoo_fin.stock_info as si
 import numpy as np
 import calendar
-
-today_date = datetime.datetime.today()
-#print(today_date.month)
-week_action = 0
-month_action = 0
-month_end = calendar.monthrange(today_date.year,today_date.month)[1]
-date = datetime.datetime.today()
-
-
-##########Check Date and Set ACTION##########
-#if it's a monday compare to 3 days ago, friday
-if date.today().weekday() == 0:
-    print('monday')
-    yesterday = (datetime.datetime.today() - datetime.timedelta(days =3)).strftime('%Y-%m-%d')
-    try:
-        si.get_data('QQQ', start_date=yesterday)['close']
-    except KeyError:
-        yesterday = (datetime.datetime.today() - datetime.timedelta(days =4)).strftime('%Y-%m-%d')
-
-#if it's a friday, do 1week analysis as well
-elif date.today().weekday() == 4:
-    print('friday')
-    week_action = 1
-    yesterday = (datetime.datetime.today() - datetime.timedelta(days =1)).strftime('%Y-%m-%d')
-    week = (datetime.datetime.today() - datetime.timedelta(days =7)).strftime('%Y-%m-%d')
-
-#if NOT Monday & appointed delta is NA, check another weekday
-elif date.today().weekday() != 0:
-    print('non-monday')
-    yesterday = (datetime.datetime.today() - datetime.timedelta(days =1)).strftime('%Y-%m-%d')
-    try:
-        si.get_data('QQQ', start_date=yesterday)['close']
-    except KeyError:
-        yesterday = (datetime.datetime.today() - datetime.timedelta(days =4)).strftime('%Y-%m-%d')
-
-print(yesterday)
-
-##########FLAG month-end#########
-# print(datetime.datetime.today())
-# today_date1 = (datetime.datetime.today() - datetime.timedelta(days =21))
-# today_date = (datetime.datetime.today() - datetime.timedelta(days =21)).strftime('%d')
-# print(today_date)
-
-# if int(today_date) == 28:
-#     month_action = 1
-#     last_month = (today_date1 - datetime.timedelta(days = 28)).strftime('%Y-%m-%d')
-#     print(last_month)
-
-if date.day == month_end:
-    month_action = 1
-    month = (datetime.datetime.today() - datetime.timedelta(days = month_end)).strftime('%Y-%m-%d')
-elif date.today().weekday() == 4:
-    if date.day + 1 == month_end:
-        month_action = 1
-        month = (datetime.datetime.today() - datetime.timedelta(days = date.day)).strftime('%Y-%m-%d')
-    if today_date.day + 2 == month_end:
-        month_action = 1
-        month = (datetime.datetime.today() - datetime.timedelta(days = date.day)).strftime('%Y-%m-%d')
-    
-
+from date import*
 
 ##########ALL: create base dictionary with tickers#########
 def create_dict(int_tickers):
@@ -132,7 +73,7 @@ print(str(date.month) +'月'+str(date.day)+'日マーケット振り返り♫' +
 if week_action == 1:
     def popu_dict_week(dict, int_tickers):
         for i in range(len(int_tickers)):
-            dict[int_tickers[i]]['close'] = (si.get_data(int_tickers[i], start_date=week)['close']).tolist()
+            dict[int_tickers[i]]['close'] = (si.get_data(int_tickers[i], start_date=week_yesterday)['close']).tolist()
         return(dict)
     
 
@@ -163,20 +104,11 @@ if week_action == 1:
 #########MONTHLY ACTION########
 ########Make sure last month start date isnt a weekend########
 
-month_end = calendar.monthrange(today_date.year,today_date.month)[1]
-last_month = (datetime.datetime.today() - datetime.timedelta(days = month_end)).strftime('%Y-%m-%d')
-print(last_month)
-if date.last_month().weekday() == 5:
-    last_month = (datetime.datetime.today() - datetime.timedelta(days = month_end+1)).strftime('%Y-%m-%d')
-elif date.last_month().weekday() == 6:
-    last_month = (datetime.datetime.today() - datetime.timedelta(days = month_end+2)).strftime('%Y-%m-%d')
-
-print(month)
-if month_action == 0 :
+if month_action == 1 :
     ########Month Variance########
     def popu_dict_month(dict, int_tickers):
         for i in range(len(int_tickers)):
-            dict[int_tickers[i]]['close'] = (si.get_data(int_tickers[i], start_date=last_month)['close']).tolist()
+            dict[int_tickers[i]]['close'] = (si.get_data(int_tickers[i], start_date=last_month.strftime('%Y-%m-%d'))['close']).tolist()
         return(dict)
     
     ext_tickers = ['^TNX','DIA','QQQ','VTI','IWM','VWO','VIS','VAW','VCR','VDE','VFH','VNQ','GLD','BTC-USD']
